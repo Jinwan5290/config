@@ -179,13 +179,13 @@ export default ({
             }
           })
         : null,
-      new ESLintPlugin(options.eslint),
-      new StyleLintPlugin(options.stylelint),
+      isProd ? new ESLintPlugin(options.eslint) : null,
+      isProd ? new StyleLintPlugin(options.stylelint) : null,
       isDev
         ? new webpack.HotModuleReplacementPlugin()
         : new MiniCssExtractPlugin({
-          filename: `${options.paths.css}/[name].[contenthash].css`
-        })
+            filename: `${options.paths.css}/[name].[contenthash].css`
+          })
     ].filter(Boolean),
     resolve: {
       extensions: ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.wasm', '.json'],
@@ -218,7 +218,7 @@ export default ({
         })
   }
 
-  if (options.isTs && Array.isArray(config.plugins)) {
+  if (isProd && options.isTs && Array.isArray(config.plugins)) {
     config.plugins.push(
       new ForkTsCheckerWebpackPlugin({
         typescript: {
